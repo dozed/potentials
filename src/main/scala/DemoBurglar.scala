@@ -57,10 +57,10 @@ object DemoBurglar extends App {
 
   disppot(jointPot)
 
-  // p(burglar|alarm=yes)
+  println("p(burglar|alarm=yes)")
   disppot(setpot(condpot(sumpot(jointPot, earthquake, radio), List(alarm)), alarm, yes))
 
-  // p(burglar|alarm=yes, radio=yes)
+  println("p(burglar|alarm=yes, radio=yes)")
   disppot(setpot(setpot(condpot(sumpot(jointPot, earthquake), List(alarm, radio)), alarm, yes), radio, yes))
 
 }

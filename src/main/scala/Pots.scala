@@ -79,7 +79,7 @@ object Pots {
   }
 
   // sum out one variable
-  def sumpot(pot: Potential, v: Variable): Potential = {
+  def sumpot(v: Variable): Potential => Potential = { pot =>
     val idx = pot.variables.indexOf(v)
     if (idx === -1) sys.error(s"variable '$v' not found")
 
@@ -94,13 +94,13 @@ object Pots {
     Potential(newVariables, newTable)
   }
 
-  def sumpot(pot: Potential, vs: Variable*): Potential = {
-    vs.toList.foldLeft(pot)((pot, v) => sumpot(pot, v))
+  def sumpot(vs: Variable*): Potential => Potential = { pot =>
+    vs.toList.foldLeft(pot)((pot, v) => sumpot(v)(pot))
   }
 
   // set variable to given state
   // - new potential does no longer contain the variable
-  def setpot(pot: Potential, v: Variable, value: Int): Potential = {
+  def setpot(v: Variable, value: Int): Potential => Potential = { pot =>
     val idx = pot.variables.indexOf(v)
     if (idx === -1) sys.error(s"variable '$v' not found")
 
@@ -117,9 +117,9 @@ object Pots {
 
   // conditional potential
   // - p(y1 y2 | x1 x2) = p(x1 x2 y1 y2) / p(x1 x2)
-  def condpot(pot: Potential, condvars: List[Variable]): Potential = {
+  def condpot(condvars: List[Variable]): Potential => Potential = { pot =>
     val marVariables = pot.variables.diff(condvars)
-    val marPot = sumpot(pot, marVariables:_*)
+    val marPot = sumpot(marVariables:_*)(pot)
 
     val newTable = pot.assignments.map(a => {
       val variableAssignmentMap = pot.variables.zip(a).toMap
@@ -132,6 +132,10 @@ object Pots {
     }).toMap
 
     Potential(pot.variables, newTable)
+  }
+
+  def condpot(condvars: Variable*): Potential => Potential = { pot =>
+    condpot(condvars.toList)(pot)
   }
 
 }

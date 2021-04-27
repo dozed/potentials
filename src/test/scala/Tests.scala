@@ -26,7 +26,7 @@ class Tests extends FunSuite {
 
     import DemoBurglar.radioPot
 
-    assert(sumpot(radioPot) === radioPot)
+    assert(sumpot()(radioPot) === radioPot)
 
   }
 

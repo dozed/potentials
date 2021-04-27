@@ -1,4 +1,5 @@
 import Pots._
+import cats.syntax.all._
 
 object DemoBurglar extends App {
 
@@ -58,9 +59,9 @@ object DemoBurglar extends App {
   disppot(jointPot)
 
   println("p(burglar|alarm=yes)")
-  disppot(setpot(condpot(sumpot(jointPot, earthquake, radio), List(alarm)), alarm, yes))
+  disppot((sumpot(earthquake, radio) >>> condpot(alarm) >>> setpot(alarm, yes))(jointPot))
 
   println("p(burglar|alarm=yes, radio=yes)")
-  disppot(setpot(setpot(condpot(sumpot(jointPot, earthquake), List(alarm, radio)), alarm, yes), radio, yes))
+  disppot((sumpot(earthquake) >>> condpot(alarm, radio) >>> setpot(alarm, yes) >>> setpot(radio, yes))(jointPot))
 
 }

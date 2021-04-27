@@ -1,4 +1,5 @@
 import Pots._
+import cats.syntax.all._
 
 object DemoStudent extends App {
 
@@ -91,39 +92,39 @@ object DemoStudent extends App {
   println(totalpot(jointPot))
 
   println("p(letter)")
-  disppot(sumpot(jointPot, difficulty, intelligence, grade, sat))
+  disppot(sumpot(difficulty, intelligence, grade, sat)(jointPot))
 
   println("p(letter|intelligence=notIntelligent)")
-  disppot(setpot(condpot(sumpot(jointPot, difficulty, grade, sat), List(intelligence)), intelligence, notIntelligent))
+  disppot((sumpot(difficulty, grade, sat) >>> condpot(intelligence) >>> setpot(intelligence, notIntelligent))(jointPot))
 
   println("p(letter|intelligence=notIntelligent, difficulty=easy)")
-  disppot(setpot(setpot(condpot(sumpot(jointPot, grade, sat), List(intelligence, difficulty)), intelligence, notIntelligent), difficulty, easy))
+  disppot((sumpot(grade, sat) >>> condpot(intelligence, difficulty) >>> setpot(intelligence, notIntelligent) >>> setpot(difficulty, easy))(jointPot))
 
   println("p(intelligence|grade=gradeC)")
-  disppot(setpot(condpot(sumpot(jointPot, difficulty, letter, sat), List(grade)), grade, gradeC))
+  disppot((sumpot(difficulty, letter, sat) >>> condpot(grade) >>> setpot(grade, gradeC))(jointPot))
 
   println("p(difficulty|grade=gradeC)")
-  disppot(setpot(condpot(sumpot(jointPot, intelligence, letter, sat), List(grade)), grade, gradeC))
+  disppot((sumpot(intelligence, letter, sat) >>> condpot(grade) >>> setpot(grade, gradeC))(jointPot))
 
   println("p(intelligence|letter=weak)")
-  disppot(setpot(condpot(sumpot(jointPot, difficulty, grade, sat), List(letter)), letter, weak))
+  disppot((sumpot(difficulty, grade, sat) >>> condpot(letter) >>> setpot(letter, weak))(jointPot))
 
   println("p(intelligence|grade=gradeC, letter=weak)")
-  disppot(setpot(setpot(condpot(sumpot(jointPot, difficulty, sat), List(letter, grade)), grade, gradeC), letter, weak))
+  disppot((sumpot(difficulty, sat) >>> condpot(letter, grade) >>> setpot(grade, gradeC) >>> setpot(letter, weak))(jointPot))
 
   println("p(intelligence|grade=gradeC, sat=high)")
-  disppot(setpot(setpot(condpot(sumpot(jointPot, difficulty, letter), List(sat, grade)), grade, gradeC), sat, high))
+  disppot((sumpot(difficulty, letter) >>> condpot(sat, grade) >>> setpot(grade, gradeC) >>> setpot(sat, high))(jointPot))
 
   println("p(difficulty|grade=gradeC, sat=high)")
-  disppot(setpot(setpot(condpot(sumpot(jointPot, intelligence, letter), List(sat, grade)), grade, gradeC), sat, high))
+  disppot((sumpot(intelligence, letter) >>> condpot(sat, grade) >>> setpot(grade, gradeC) >>> setpot(sat, high))(jointPot))
 
   println("p(intelligence|grade=gradeC, difficulty=difficult)")
-  disppot(setpot(setpot(condpot(sumpot(jointPot, letter, sat), List(difficulty, grade)), grade, gradeC), difficulty, difficult))
+  disppot((sumpot(sat, letter) >>> condpot(difficulty, grade) >>> setpot(grade, gradeC) >>> setpot(difficulty, difficult))(jointPot))
 
   println("p(intelligence|grade=gradeB)")
-  disppot(setpot(condpot(sumpot(jointPot, difficulty, letter, sat), List(grade)), grade, gradeB))
+  disppot((sumpot(difficulty, sat, letter) >>> condpot(grade) >>> setpot(grade, gradeB))(jointPot))
 
   println("p(intelligence|grade=gradeB, difficulty=difficult)")
-  disppot(setpot(setpot(condpot(sumpot(jointPot, letter, sat), List(difficulty, grade)), grade, gradeB), difficulty, difficult))
+  disppot((sumpot(sat, letter) >>> condpot(difficulty, grade) >>> setpot(grade, gradeB) >>> setpot(difficulty, difficult))(jointPot))
 
 }

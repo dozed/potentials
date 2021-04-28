@@ -12,6 +12,7 @@ object Pots {
   object Variable {
     implicit def varEqual: Eq[Variable] = Eq.fromUniversalEquals
     implicit def varOrder: Order[Variable] = Order.by(_.index)
+    implicit def varOrdering: Ordering[Variable] = varOrder.toOrdering
   }
 
   case class Potential(variables: List[Variable], table: Map[Assignment, Double]) {
@@ -55,7 +56,7 @@ object Pots {
 
   // multiply two potentials
   def multpots(pot1: Potential, pot2: Potential): Potential = {
-    val newVariables = pot1.variables.concat(pot2.variables).ordDistinct
+    val newVariables = pot1.variables.concat(pot2.variables).sorted.distinct
     val domains = newVariables.map(_.domain)
     val allAssignments = crossProduct(domains)
 

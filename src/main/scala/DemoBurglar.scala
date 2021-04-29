@@ -64,4 +64,14 @@ object DemoBurglar extends App {
   println("p(burglar|alarm=yes, radio=yes)")
   disppot((sumpot(earthquake) >>> condpot(alarm, radio) >>> setpot(alarm, yes) >>> setpot(radio, yes))(jointPot))
 
+  // d-separation
+  println("p(burglar)")
+  disppot(sumpot(earthquake, radio, alarm)(jointPot))
+
+  println("p(burglar|radio=yes)")
+  disppot((sumpot(earthquake, alarm) >>> condpot(radio) >>> setpot(radio, yes))(jointPot))
+
+  println("p(burglar|earthquake=yes)")
+  disppot((sumpot(radio, alarm) >>> condpot(earthquake) >>> setpot(earthquake, yes))(jointPot))
+
 }

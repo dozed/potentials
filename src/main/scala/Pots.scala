@@ -119,8 +119,8 @@ object Pots {
   // conditional potential
   // - p(y1 y2 | x1 x2) = p(x1 x2 y1 y2) / p(x1 x2)
   def condpot(condvars: List[Variable]): Potential => Potential = { pot =>
-    val marVariables = pot.variables.diff(condvars)
-    val marPot = sumpot(marVariables:_*)(pot)
+    val sumVariables = pot.variables.diff(condvars)
+    val marPot = sumpot(sumVariables:_*)(pot)
 
     val newTable = pot.assignments.map(a => {
       val variableAssignmentMap = pot.variables.zip(a).toMap

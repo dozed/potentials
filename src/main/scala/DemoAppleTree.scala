@@ -38,6 +38,6 @@ object DemoAppleTree extends App {
 
   // all apples grow on trees
   println("p(growsOnTree|isApple=yes)")
-  disppot((sumpot(isFruit) >>> condpot(isApple) >>> setpot(isApple, yes))(jointPot))
+  disppot((sumpot(isFruit) >>> setpot(isApple, yes))(jointPot))
 
 }
